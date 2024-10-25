@@ -40,3 +40,21 @@
 ![wallets_that_have_transations_each_year.png](plots/6_wallets_that_have_transactions_each_year/wallets_that_have_transations_each_year.png)
 
 ### TODO explanation..............
+
+## 7.wallets_that_have_transactions_each_year_per_crime
+
+![wallets_that_have_transactions_each_year_per_crime.png](plots/7_wallets_that_have_transactions_each_year_per_crime/wallets_that_have_transactions_each_year_per_crime.png)
+
+### TODO explanation..................
+
+## 8. number of transactions each year
+
+![number_of_transactions_each_year.png](plots/8_number_of_transactions_each_year/number_of_transactions_each_year.png)
+
+### results for counting only one in total for each transation i dont know if this is of any interset discrepency is becasue, If a single transaction has multiple inputs or outputs involving the same wallet, we might count each input and each output individually. However, when counting the total, we only increment once per unique transaction, leading to a situation where the sum of inputs and outputs is greater than the total count.
+
+
+![myplot.png](plots/8_number_of_transactions_each_year/totall_only_one.png) 
+
+### TODO explanation..................
+

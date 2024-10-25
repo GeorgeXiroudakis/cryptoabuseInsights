@@ -2,8 +2,8 @@ import json
 from collections import defaultdict
 
 # Paths for input and output files
-abuse_json_path = 'data/Abuses.json'
-wallets_by_abuse_type_path = 'data/wallets_by_abuse_type2.json'
+abuse_json_path = '../data/Abuses.json'
+wallets_by_abuse_type_path = '../data/wallets_by_abuse_type.json'
 
 # Load the Abuses.json file
 with open(abuse_json_path, 'r') as f:
