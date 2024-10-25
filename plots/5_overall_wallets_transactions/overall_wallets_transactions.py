@@ -2,6 +2,8 @@ import json
 import os
 from decimal import Decimal
 import matplotlib.pyplot as plt
+from datetime import datetime
+from matplotlib.patches import FancyBboxPatch
 
 # Paths
 wallets_folder = '../../data/bitcoin'
@@ -47,14 +49,24 @@ for wallet in all_wallets:
             total_wallets += 1
             total_transactions += n_tx
 
-            # Count incoming transactions (outputs where this wallet is the recipient)
+            # Count incoming and outgoing transactions and BTC amounts
             for tx in wallet_data.get('txs', []):
+                timestamp = tx.get('time')
+                if not timestamp:
+                    continue
+
+                # Convert timestamp to year and exclude transactions before 2012
+                transaction_year = datetime.utcfromtimestamp(timestamp).year
+                if transaction_year < 2012:
+                    continue
+
+                # Process incoming transactions (outputs where this wallet is the recipient)
                 for output in tx.get('out', []):
                     if 'addr' in output and output['addr'] == wallet:
                         total_incoming_transactions += 1
                         total_received_btc += Decimal(output.get('value', 0)) / Decimal('100000000')
 
-                # Count outgoing transactions (inputs where this wallet is the sender)
+                # Process outgoing transactions (inputs where this wallet is the sender)
                 for input_tx in tx.get('inputs', []):
                     prev_out = input_tx.get('prev_out', {})
                     if 'addr' in prev_out and prev_out['addr'] == wallet:
@@ -77,32 +89,31 @@ print(f"Total BTC received: {total_received_btc} BTC")
 print(f"Total BTC sent: {total_sent_btc} BTC")
 
 # Visualization
-fig, axs = plt.subplots(2, 3, figsize=(15, 10))
+fig, axs = plt.subplots(2, 3, figsize=(15, 8))
 
 # Data for visualization
-labels = ['Total Wallets', 'Total Transactions', 'Incoming Transactions', 'Outgoing Transactions', 'BTC Received',
-          'BTC Sent']
-values = [
-    total_wallets,
-    total_transactions,
-    total_incoming_transactions,
-    total_outgoing_transactions,
-    float(total_received_btc),
-    float(total_sent_btc)
-]
+metrics = {
+    'Total Wallets': total_wallets,
+    'Total Transactions': total_transactions,
+    'Incoming Transactions': total_incoming_transactions,
+    'Outgoing Transactions': total_outgoing_transactions,
+    'BTC Received': float(total_received_btc),
+    'BTC Sent': float(total_sent_btc)
+}
 
-# Use a professional color palette for variety
-colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b']
+# Define background colors for each metric
+background_colors = ['#d1e8ff', '#ffe0b2', '#d4edda', '#f8d7da', '#e2e3e5', '#f5f5f5']
 
-# Plot each metric in a slim bar with exact values on top
-for i, (label, value, ax) in enumerate(zip(labels, values, axs.flat)):
-    ax.bar([label], [value], color=colors[i], width=0.3)
-    ax.set_title(label)
-    ax.set_ylabel('Count' if i < 4 else 'BTC')
-    ax.set_xticks([])
+# Display each metric as large, centered text with distinct backgrounds
+for ax, (label, value), color in zip(axs.flat, metrics.items(), background_colors):
+    # Draw a colored rectangle as the background
+    bbox = FancyBboxPatch((0.1, 0.1), 0.8, 0.8, boxstyle="round,pad=0.1", color=color, transform=ax.transAxes)
+    ax.add_patch(bbox)
 
-    # Add the exact value on top of the bar with black text
-    ax.text(0, value, f'{value:,.2f}', ha='center', va='bottom', fontsize=10, color='black')
+    # Add the text for the value
+    ax.text(0.5, 0.6, f"{value:,.2f}", ha='center', va='center', fontsize=26, fontweight='bold', color='#333')
+    ax.set_title(label, fontsize=18, fontweight='bold')
+    ax.axis('off')  # Turn off the axis for a cleaner look
 
 # Adjust layout for better readability
 plt.tight_layout()

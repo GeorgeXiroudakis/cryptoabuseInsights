@@ -2,8 +2,9 @@
 
 ## 0. Overall movement of funds  
 
-### #TODO explanation....... 
 ![Totall_funds.png](plots/0_Overall_crime/Totall_funds.png)
+
+### #TODO explanation....... 
 
 ## 1. Pie chart of total money per abuse type
 
