@@ -59,3 +59,10 @@
 
 ### TODO explanation..................
 
+
+## 10. Number_of_wallets_and_transactions
+
+![Numver_of_wallets_and_transactions.png](plots/10_Number_of_wallets_and_transactions/Numver_of_wallets_and_transactions.png)
+
+## TODO explanation..................
+
